@@ -10,7 +10,7 @@
 <script>
   const SUPABASE_URL = 'https://wmrlyjxyhpgnpbzqgbjn.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indtcmx5anh5aHBnbnBienFnYmpuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2MDc5MDQsImV4cCI6MjA5NTE4MzkwNH0.QAe0Mq9zsENoBit9IObr505nrP7JlJCb3U6bW2R_HTc';
-  const ADMIN_PASSWORD = 'KesariAdmin2026';
+  const ADMIN_PASSWORD = 'Admin2026';
 </script>
 
 <style>
@@ -290,13 +290,33 @@ tr:hover td{background:rgba(255,107,0,0.03);}
   <!-- MAIN -->
   <main class="main">
     <div class="topbar">
-      <div class="tb-title" id="tabTitle">Services Management</div>
-      <div class="tb-acts">
-        <div class="tb-search"><i class="fas fa-search"></i><input type="text" id="searchInput" placeholder="Search..."/></div>
-        <button class="btn-add" id="addBtn"><i class="fas fa-plus"></i> Add Service</button>
-      </div>
+  <div class="tb-title" id="tabTitle">Services Management</div>
+
+  <div class="tb-acts">
+    <div class="tb-search">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search..." />
     </div>
 
+    <button class="btn-add" id="addBtn">
+      <i class="fas fa-plus"></i> Add Service
+    </button>
+
+    <a href="https://bill-seven-kohl.vercel.app/" target="_blank" class="btn-add">
+      <i class="fas fa-file-invoice"></i> INVOICE
+    </a>
+  </div>
+</div>
+<!-- <style>
+  .invoice-btn{
+    background:#28a745;
+    color:#fff;
+    text-decoration:none;
+    padding:10px 15px;
+    border-radius:6px;
+    margin-left:10px;
+}
+</style> -->
     <div class="content">
 
       <!-- ── SERVICES TAB ── -->

@@ -198,11 +198,6 @@ tr:hover td{background:rgba(255,107,0,0.03);}
 .ig-btn{width:36px;height:36px;border-radius:7px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1.5px solid var(--border);cursor:pointer;font-size:14px;color:var(--muted);transition:all 0.2s;}
 .ig-btn:hover,.ig-btn.sel{background:rgba(255,107,0,0.15);border-color:var(--saffron);color:var(--saffron);}
 
-/* ── STAR PICKER ── */
-.star-picker{display:flex;gap:6px;font-size:24px;}
-.star-picker i{color:var(--border);cursor:pointer;transition:color 0.15s;}
-.star-picker i.on{color:#FFB800;}
-
 /* ── STATUS SELECTOR ── */
 .status-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;grid-column:1/-1;}
 .ss-opt{padding:10px 8px;border-radius:var(--r-sm);border:2px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-weight:700;font-family:var(--font-body);text-align:center;transition:all 0.2s;color:var(--muted);}
@@ -270,10 +265,6 @@ tr:hover td{background:rgba(255,107,0,0.03);}
 .bc-mini-bar{width:120px;height:7px;background:var(--card);border-radius:99px;overflow:hidden;}
 .bc-mini-fill{height:100%;background:var(--green);}
 
-/* ── TESTIMONIALS PREVIEW ── */
-.tp-stars{color:#FFB800;font-size:12px;letter-spacing:1px;}
-.tp-msg{color:var(--muted);font-size:12px;max-width:280px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-
 @media(max-width:900px){.sidebar{display:none;}.mf{grid-template-columns:1fr;}.status-selector{grid-template-columns:repeat(2,1fr);}}
 @media(max-width:600px){.content{padding:16px;}.stats-row{grid-template-columns:1fr 1fr;gap:10px;}.topbar{padding:14px 16px;}.tb-search{display:none;}}
 </style>
@@ -305,7 +296,6 @@ tr:hover td{background:rgba(255,107,0,0.03);}
     <div class="sb-nav">
       <div class="sb-sec">Main</div>
       <button class="sbn active" data-tab="services"><i class="fas fa-cogs"></i> Services</button>
-      <button class="sbn" data-tab="testimonials"><i class="fas fa-quote-left"></i> Testimonials</button>
       <button class="sbn" data-tab="works"><i class="fas fa-tasks"></i> Works <span id="sb-pending-count" style="margin-left:auto;background:rgba(245,158,11,0.2);color:#F59E0B;font-size:10px;padding:1px 7px;border-radius:99px;font-weight:700;display:none;"></span></button>
       <button class="sbn" data-tab="customers"><i class="fas fa-address-book"></i> Customer Data</button>
       <button class="sbn" data-tab="broadcast"><i class="fab fa-whatsapp"></i> Send Poster / Ads</button>
@@ -388,29 +378,6 @@ tr:hover td{background:rgba(255,107,0,0.03);}
             <table>
               <thead><tr><th>#</th><th>Service Name</th><th>Category</th><th>Documents</th><th>Sort</th><th>Status</th><th>Actions</th></tr></thead>
               <tbody id="svcTbody"><tr class="loading-row"><td colspan="7"><i class="fas fa-spinner"></i><br>Loading services...</td></tr></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── TESTIMONIALS TAB ── -->
-      <div id="tab-testimonials" style="display:none;">
-        <div id="tiBanner" style="display:none;"></div>
-        <div class="stats-row">
-          <div class="stat-c"><div class="sc-ic orange"><i class="fas fa-quote-left"></i></div><div><div class="sc-v" id="ti-total">—</div><div class="sc-l">Total Testimonials</div></div></div>
-          <div class="stat-c"><div class="sc-ic green"><i class="fas fa-check-circle"></i></div><div><div class="sc-v" id="ti-active">—</div><div class="sc-l">Active (shown on site)</div></div></div>
-          <div class="stat-c"><div class="sc-ic yellow"><i class="fas fa-pause-circle"></i></div><div><div class="sc-v" id="ti-inactive">—</div><div class="sc-l">Inactive</div></div></div>
-          <div class="stat-c"><div class="sc-ic purple"><i class="fas fa-star"></i></div><div><div class="sc-v" id="ti-avg">—</div><div class="sc-l">Average Rating</div></div></div>
-        </div>
-        <div class="table-wrap">
-          <div class="tw-head">
-            <h3>All Testimonials <span id="tiCount" style="font-size:13px;color:var(--muted);font-weight:400;"></span></h3>
-            <div style="font-size:12px;color:var(--muted);">Edit to modify • Toggle to show/hide on website</div>
-          </div>
-          <div style="overflow-x:auto;">
-            <table>
-              <thead><tr><th>#</th><th>Client</th><th>Rating</th><th>Message</th><th>Sort</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody id="tiTbody"><tr class="loading-row"><td colspan="7"><i class="fas fa-spinner"></i><br>Loading testimonials...</td></tr></tbody>
             </table>
           </div>
         </div>
@@ -760,41 +727,7 @@ CREATE POLICY "Allow all campaign_sends" ON campaign_sends FOR ALL USING (true) 
               <button class="copy-sql-btn" onclick="copySql('sql-broadcast')"><i class="fas fa-copy"></i> Copy SQL</button>
             </div>
 
-            <!-- STEP 6: Testimonials Table -->
-            <div style="background:var(--card);border-radius:var(--r-sm);padding:20px;border-left:3px solid #F59E0B;">
-              <h4 style="font-family:var(--font-head);margin-bottom:10px;color:#F59E0B;">Step 6: Testimonials Table (Naya)</h4>
-              <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Website ke "What Our Clients Say" section ko database se chalane ke liye ye zaroori hai:</p>
-              <div class="sql-box" id="sql-testimonials">-- Testimonials table
-CREATE TABLE IF NOT EXISTS testimonials (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  location TEXT DEFAULT 'Surat, Gujarat',
-  rating SMALLINT NOT NULL DEFAULT 5 CHECK (rating BETWEEN 1 AND 5),
-  message TEXT NOT NULL,
-  is_active BOOLEAN NOT NULL DEFAULT true,
-  sort_order INTEGER NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE INDEX IF NOT EXISTS testimonials_sort_idx ON testimonials (is_active, sort_order);
-
-ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
-
--- Public (website) can read only active testimonials
-DROP POLICY IF EXISTS "Public can read active testimonials" ON testimonials;
-CREATE POLICY "Public can read active testimonials"
-  ON testimonials FOR SELECT
-  USING (is_active = true);
-
--- Admin panel needs full access (add/edit/delete/toggle) using the anon key
-DROP POLICY IF EXISTS "Testimonials full admin access" ON testimonials;
-CREATE POLICY "Testimonials full admin access"
-  ON testimonials FOR ALL
-  USING (true) WITH CHECK (true);</div>
-              <button class="copy-sql-btn" onclick="copySql('sql-testimonials')"><i class="fas fa-copy"></i> Copy SQL</button>
-            </div>
-
-            <!-- STEP 7: All in one -->
+            <!-- STEP 6: All in one -->
             <div style="background:var(--card);border-radius:var(--r-sm);padding:20px;border-left:3px solid var(--purple);">
               <h4 style="font-family:var(--font-head);margin-bottom:10px;color:var(--purple);">⚡ One-Click Fix — Sab Ek Saath Run Karo</h4>
               <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Upar ka sab ek jagah — sirf ek baar run karo, sab fix ho jayega:</p>
@@ -884,24 +817,6 @@ CREATE POLICY "Allow all poster_campaigns" ON poster_campaigns FOR ALL USING (tr
 DROP POLICY IF EXISTS "Allow all campaign_sends" ON campaign_sends;
 CREATE POLICY "Allow all campaign_sends" ON campaign_sends FOR ALL USING (true) WITH CHECK (true);
 
--- 7. Testimonials Table
-CREATE TABLE IF NOT EXISTS testimonials (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  location TEXT DEFAULT 'Surat, Gujarat',
-  rating SMALLINT NOT NULL DEFAULT 5 CHECK (rating BETWEEN 1 AND 5),
-  message TEXT NOT NULL,
-  is_active BOOLEAN NOT NULL DEFAULT true,
-  sort_order INTEGER NOT NULL DEFAULT 0,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE INDEX IF NOT EXISTS testimonials_sort_idx ON testimonials (is_active, sort_order);
-ALTER TABLE testimonials ENABLE ROW LEVEL SECURITY;
-DROP POLICY IF EXISTS "Public can read active testimonials" ON testimonials;
-CREATE POLICY "Public can read active testimonials" ON testimonials FOR SELECT USING (is_active = true);
-DROP POLICY IF EXISTS "Testimonials full admin access" ON testimonials;
-CREATE POLICY "Testimonials full admin access" ON testimonials FOR ALL USING (true) WITH CHECK (true);
-
 -- Done! All tables are ready.</div>
               <button class="copy-sql-btn" onclick="copySql('sql-all')" style="background:rgba(168,85,247,0.2);border-color:rgba(168,85,247,0.4);color:var(--purple);"><i class="fas fa-copy"></i> Copy All-in-One SQL</button>
             </div>
@@ -968,41 +883,6 @@ CREATE POLICY "Testimonials full admin access" ON testimonials FOR ALL USING (tr
     <div class="modal-foot">
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
       <button class="btn-save" id="saveBtn" onclick="saveService()"><i class="fas fa-save"></i> Save Service</button>
-    </div>
-  </div>
-</div>
-
-<!-- TESTIMONIAL MODAL -->
-<div class="modal-bg" id="tiModal">
-  <div class="modal">
-    <div class="modal-head">
-      <h2 id="tiModalTitle">Add New Testimonial</h2>
-      <button class="close-btn" onclick="closeTiModal()"><i class="fas fa-times"></i></button>
-    </div>
-    <div class="modal-body">
-      <div class="mf">
-        <div class="fl"><label>Client Name *</label><input type="text" id="ti-name" placeholder="e.g. Ramesh Patel"/></div>
-        <div class="fl"><label>Location</label><input type="text" id="ti-location" placeholder="e.g. Surat, Gujarat"/></div>
-        <div class="fl">
-          <label>Rating</label>
-          <div class="star-picker" id="tiStarPicker">
-            <i class="fas fa-star" data-v="1"></i>
-            <i class="fas fa-star" data-v="2"></i>
-            <i class="fas fa-star" data-v="3"></i>
-            <i class="fas fa-star" data-v="4"></i>
-            <i class="fas fa-star" data-v="5"></i>
-          </div>
-        </div>
-        <div class="fl"><label>Sort Order</label><input type="number" id="ti-sort" value="99" min="1"/></div>
-        <div class="fl"><label>Status</label>
-          <select id="ti-active"><option value="true">Active (visible on site)</option><option value="false">Inactive (hidden)</option></select>
-        </div>
-        <div class="fl full"><label>Testimonial Message *</label><textarea id="ti-message" rows="4" placeholder="e.g. Excellent service! My PAN card was processed within 2 days..."></textarea></div>
-      </div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn-cancel" onclick="closeTiModal()">Cancel</button>
-      <button class="btn-save" id="tiSaveBtn" onclick="saveTestimonial()"><i class="fas fa-save"></i> Save Testimonial</button>
     </div>
   </div>
 </div>
@@ -1097,7 +977,6 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 /* ── STATE ── */
 let services = [];
-let testimonials = [];
 let works = [];
 let customers = [];
 let campaigns = [];
@@ -1109,11 +988,9 @@ let currentWorkStatus = 'all';
 let currentCustYear = 'all';
 let currentCustWorkType = 'all';
 let editingId = null;
-let editingTiId = null;
 let editingWorkId = null;
 let editingCustId = null;
 let selectedWorkStatus = 'pending';
-let selectedTiRating = 5;
 let searchQ = '';
 
 const ICONS = ['fas fa-file-invoice','fas fa-id-card','fas fa-vote-yea','fas fa-heartbeat','fas fa-hard-hat','fas fa-shopping-basket','fas fa-hand-holding-usd','fas fa-baby','fas fa-industry','fas fa-passport','fas fa-store','fas fa-file-alt','fas fa-utensils','fas fa-building','fas fa-home','fas fa-school','fas fa-ring','fas fa-car','fas fa-shield-alt','fas fa-motorcycle','fas fa-heart','fas fa-briefcase','fas fa-money-bill-wave','fas fa-train','fas fa-plane','fas fa-tools','fas fa-graduation-cap','fas fa-hospital','fas fa-tractor'];
@@ -1142,9 +1019,7 @@ function logout(){ location.reload(); }
 ══════════════════════════════════════ */
 function initAdmin(){
   buildIconGrid();
-  buildTiStarPicker();
   loadServices();
-  loadTestimonials();
   loadWorks();
   loadCustomers();
   loadCampaigns();
@@ -1152,7 +1027,6 @@ function initAdmin(){
   document.getElementById('searchInput').addEventListener('input', e => {
     searchQ = e.target.value.toLowerCase();
     renderTable();
-    renderTiTable();
     renderWorkTable();
     renderCustomerTable();
   });
@@ -1161,7 +1035,6 @@ function initAdmin(){
     const activeTab = document.querySelector('.sbn.active')?.dataset.tab;
     if(activeTab === 'works') openWorkModal(null);
     else if(activeTab === 'customers') openCustModal(null);
-    else if(activeTab === 'testimonials') openTiModal(null);
     else openModal(null);
   });
 
@@ -1170,12 +1043,12 @@ function initAdmin(){
     document.querySelectorAll('.sbn').forEach(x => x.classList.remove('active'));
     this.classList.add('active');
     const tab = this.dataset.tab;
-    ['services','testimonials','works','customers','broadcast','inquiries','settings','help'].forEach(t => {
+    ['services','works','customers','broadcast','inquiries','settings','help'].forEach(t => {
       document.getElementById('tab-'+t).style.display = t===tab ? 'block' : 'none';
     });
-    const titles = {services:'Services Management', testimonials:'Testimonials Management', works:'Works Management', customers:'Customer Data', broadcast:'Send Poster / Ads', inquiries:'Customer Inquiries', settings:'Business Settings', help:'DB Setup & Fix'};
+    const titles = {services:'Services Management', works:'Works Management', customers:'Customer Data', broadcast:'Send Poster / Ads', inquiries:'Customer Inquiries', settings:'Business Settings', help:'DB Setup & Fix'};
     document.getElementById('tabTitle').textContent = titles[tab] || tab;
-    const addLabels = {services:'Add Service', testimonials:'Add Testimonial', works:'Add Work', customers:'Add Customer'};
+    const addLabels = {services:'Add Service', works:'Add Work', customers:'Add Customer'};
     if(addLabels[tab]){
       document.getElementById('addBtn').style.display = 'flex';
       document.getElementById('addBtn').innerHTML = `<i class="fas fa-plus"></i> ${addLabels[tab]}`;
@@ -1185,7 +1058,6 @@ function initAdmin(){
     if(tab==='inquiries') loadInquiries();
     if(tab==='works') loadWorks();
     if(tab==='customers') loadCustomers();
-    if(tab==='testimonials') loadTestimonials();
     if(tab==='broadcast'){ refreshBcFilters(); loadCampaigns(); }
   }));
 
@@ -1395,174 +1267,6 @@ async function deleteService(id){
     toast('Service deleted.','success');
   } catch(err){ toast('Delete failed: '+err.message,'error'); }
 }
-
-/* ══════════════════════════════════════
-   TESTIMONIALS
-══════════════════════════════════════ */
-async function loadTestimonials(){
-  document.getElementById('tiTbody').innerHTML = '<tr class="loading-row"><td colspan="7"><i class="fas fa-spinner"></i><br>Loading from Supabase...</td></tr>';
-  try {
-    const { data, error } = await sb.from('testimonials').select('*').order('sort_order');
-    if(error) throw error;
-    testimonials = data || [];
-    hideTiBanner();
-  } catch(err) {
-    showTiBanner('❌ Database Error: ' + err.message + ' — Go to "DB Setup & Fix" tab (Step 6) to fix.', 'err');
-    testimonials = [];
-  }
-  updateTiStats(); renderTiTable();
-}
-
-function updateTiStats(){
-  document.getElementById('ti-total').textContent = testimonials.length;
-  document.getElementById('ti-active').textContent = testimonials.filter(t=>t.is_active).length;
-  document.getElementById('ti-inactive').textContent = testimonials.filter(t=>!t.is_active).length;
-  const avg = testimonials.length ? (testimonials.reduce((s,t)=>s+(t.rating||5),0)/testimonials.length) : 0;
-  document.getElementById('ti-avg').textContent = testimonials.length ? avg.toFixed(1) : '—';
-}
-
-function renderTiTable(){
-  let filtered = testimonials;
-  if(searchQ) filtered = filtered.filter(t =>
-    (t.name||'').toLowerCase().includes(searchQ) ||
-    (t.location||'').toLowerCase().includes(searchQ) ||
-    (t.message||'').toLowerCase().includes(searchQ)
-  );
-  document.getElementById('tiCount').textContent = `(${filtered.length})`;
-  if(!filtered.length){
-    document.getElementById('tiTbody').innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--muted);">No testimonials found</td></tr>';
-    return;
-  }
-  document.getElementById('tiTbody').innerHTML = filtered.map((t,i) => {
-    const stars = '★★★★★'.slice(0, Math.max(1,Math.min(5,t.rating||5)));
-    return `<tr>
-      <td style="color:var(--muted);font-size:12px;">${i+1}</td>
-      <td>
-        <div style="font-weight:600;font-size:13.5px;">${esc(t.name)}</div>
-        <div style="font-size:11px;color:var(--muted);"><i class="fas fa-map-marker-alt"></i> ${esc(t.location||'—')}</div>
-      </td>
-      <td><span class="tp-stars">${stars}</span></td>
-      <td><div class="tp-msg" title="${esc(t.message)}">${esc(t.message)}</div></td>
-      <td style="color:var(--muted);font-size:12px;">${t.sort_order}</td>
-      <td><button class="toggle ${t.is_active?'on':''}" onclick="toggleTiActive('${t.id}',${t.is_active})"></button></td>
-      <td>
-        <div class="act-btns">
-          <button class="ab up" title="Move Up" onclick="moveTiSort('${t.id}',-1)"><i class="fas fa-arrow-up"></i></button>
-          <button class="ab dn" title="Move Down" onclick="moveTiSort('${t.id}',1)"><i class="fas fa-arrow-down"></i></button>
-          <button class="ab edit" title="Edit" onclick="openTiModal('${t.id}')"><i class="fas fa-edit"></i></button>
-          <button class="ab del" title="Delete" onclick="confirmDelete('testimonial','${t.id}','${esc(t.name).replace(/'/g,"\\'")}')"><i class="fas fa-trash-alt"></i></button>
-        </div>
-      </td>
-    </tr>`;
-  }).join('');
-}
-
-async function toggleTiActive(id, curr){
-  try {
-    const { error } = await sb.from('testimonials').update({ is_active: !curr }).eq('id', id);
-    if(error) throw error;
-    const idx = testimonials.findIndex(t=>t.id===id);
-    if(idx>-1) testimonials[idx].is_active = !curr;
-    updateTiStats(); renderTiTable();
-    toast(`Testimonial ${!curr?'shown on site':'hidden from site'}.`, 'success');
-  } catch(err){ toast('Failed: '+err.message, 'error'); }
-}
-
-async function moveTiSort(id, dir){
-  const idx = testimonials.findIndex(t=>t.id===id); if(idx<0) return;
-  const newSort = testimonials[idx].sort_order + dir;
-  try {
-    const { error } = await sb.from('testimonials').update({ sort_order: newSort }).eq('id', id);
-    if(error) throw error;
-    testimonials[idx].sort_order = newSort;
-    testimonials.sort((a,b) => a.sort_order - b.sort_order);
-    renderTiTable(); toast('Order updated.','info');
-  } catch(err){ toast('Failed: '+err.message,'error'); }
-}
-
-/* ── TESTIMONIAL MODAL ── */
-function buildTiStarPicker(){
-  document.querySelectorAll('#tiStarPicker i').forEach(star => {
-    star.addEventListener('click', () => {
-      selectedTiRating = parseInt(star.dataset.v);
-      paintTiStars();
-    });
-  });
-}
-function paintTiStars(){
-  document.querySelectorAll('#tiStarPicker i').forEach(star => {
-    star.classList.toggle('on', parseInt(star.dataset.v) <= selectedTiRating);
-  });
-}
-
-function openTiModal(id){
-  editingTiId = id;
-  const t = id ? testimonials.find(x=>x.id===id) : null;
-  document.getElementById('tiModalTitle').textContent = t ? 'Edit Testimonial' : 'Add New Testimonial';
-  document.getElementById('ti-name').value = t?.name || '';
-  document.getElementById('ti-location').value = t?.location || 'Surat, Gujarat';
-  document.getElementById('ti-sort').value = t?.sort_order || 99;
-  document.getElementById('ti-active').value = t ? String(t.is_active) : 'true';
-  document.getElementById('ti-message').value = t?.message || '';
-  selectedTiRating = t?.rating || 5;
-  paintTiStars();
-  document.getElementById('tiModal').classList.add('open');
-}
-function closeTiModal(){ document.getElementById('tiModal').classList.remove('open'); }
-document.getElementById('tiModal').addEventListener('click', e => { if(e.target===document.getElementById('tiModal')) closeTiModal(); });
-
-async function saveTestimonial(){
-  const name = document.getElementById('ti-name').value.trim();
-  const message = document.getElementById('ti-message').value.trim();
-  if(!name){ toast('Client name required.','error'); return; }
-  if(!message){ toast('Testimonial message required.','error'); return; }
-
-  const payload = {
-    name,
-    location: document.getElementById('ti-location').value.trim() || 'Surat, Gujarat',
-    rating: selectedTiRating,
-    message,
-    sort_order: parseInt(document.getElementById('ti-sort').value) || 99,
-    is_active: document.getElementById('ti-active').value === 'true',
-  };
-
-  const btn = document.getElementById('tiSaveBtn');
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
-  try {
-    if(editingTiId){
-      const { error } = await sb.from('testimonials').update(payload).eq('id', editingTiId);
-      if(error) throw error;
-      const idx = testimonials.findIndex(t=>t.id===editingTiId);
-      if(idx>-1) testimonials[idx] = {...testimonials[idx], ...payload};
-      toast('Testimonial updated!','success');
-    } else {
-      const { data, error } = await sb.from('testimonials').insert(payload).select().single();
-      if(error) throw error;
-      testimonials.push(data);
-      toast('Testimonial added!','success');
-    }
-    closeTiModal(); updateTiStats(); renderTiTable();
-  } catch(err){
-    toast('Save failed: ' + err.message + ' — Check DB Setup tab (Step 6).','error');
-    console.error('Testimonial save error:', err);
-  } finally {
-    btn.innerHTML = '<i class="fas fa-save"></i> Save Testimonial'; btn.disabled = false;
-  }
-}
-
-async function deleteTestimonial(id){
-  try {
-    const { error } = await sb.from('testimonials').delete().eq('id', id);
-    if(error) throw error;
-    testimonials = testimonials.filter(t=>t.id!==id);
-    updateTiStats(); renderTiTable();
-    document.getElementById('delModal').classList.remove('open');
-    toast('Testimonial deleted.','success');
-  } catch(err){ toast('Delete failed: '+err.message,'error'); }
-}
-
-function showTiBanner(msg,type){ const b=document.getElementById('tiBanner'); b.className=`db-banner ${type}`; b.innerHTML=`<i class="fas fa-${type==='ok'?'check-circle':type==='err'?'times-circle':'exclamation-triangle'}"></i> ${msg}`; b.style.display='flex'; }
-function hideTiBanner(){ document.getElementById('tiBanner').style.display='none'; }
 
 /* ══════════════════════════════════════
    WORKS
@@ -2167,7 +1871,6 @@ function confirmDelete(type, id, name){
   document.getElementById('delModal').classList.add('open');
   document.getElementById('delConfirmBtn').onclick = () => {
     if(type==='service') deleteService(id);
-    else if(type==='testimonial') deleteTestimonial(id);
     else if(type==='work') deleteWork(id);
     else if(type==='customer') deleteCustomer(id);
     else deleteCampaign(id);
@@ -2212,7 +1915,7 @@ function addWorkFromInquiry(name, phone, service){
   // Switch to works tab and pre-fill
   document.querySelectorAll('.sbn').forEach(x=>x.classList.remove('active'));
   document.querySelector('.sbn[data-tab="works"]').classList.add('active');
-  ['services','testimonials','works','customers','broadcast','inquiries','settings','help'].forEach(t => {
+  ['services','works','customers','broadcast','inquiries','settings','help'].forEach(t => {
     document.getElementById('tab-'+t).style.display = t==='works' ? 'block' : 'none';
   });
   document.getElementById('tabTitle').textContent = 'Works Management';
@@ -2238,11 +1941,6 @@ async function testConnection(){
     const { data, error } = await sb.from('services').select('count', {count:'exact',head:true});
     results.push(error ? `❌ services: ${error.message}` : `✅ services: OK`);
   } catch(e){ results.push(`❌ services: ${e.message}`); }
-  // Test testimonials
-  try {
-    const { data, error } = await sb.from('testimonials').select('count', {count:'exact',head:true});
-    results.push(error ? `❌ testimonials: ${error.message}` : `✅ testimonials: OK`);
-  } catch(e){ results.push(`❌ testimonials: ${e.message}`); }
   // Test works
   try {
     const { data, error } = await sb.from('works').select('count', {count:'exact',head:true});
@@ -2274,14 +1972,6 @@ async function testConnection(){
     await sb.from('customer_records').delete().eq('id', data.id);
     results.push(`✅ customer_records INSERT/DELETE: OK`);
   } catch(e){ results.push(`❌ customer_records INSERT: ${e.message}`); }
-  // Test insert testimonials
-  try {
-    const testPayload = { name: '__test__', location: '__test__', rating: 5, message: '__test__', is_active: false, sort_order: 999 };
-    const { data, error } = await sb.from('testimonials').insert(testPayload).select().single();
-    if(error) throw error;
-    await sb.from('testimonials').delete().eq('id', data.id);
-    results.push(`✅ testimonials INSERT/DELETE: OK`);
-  } catch(e){ results.push(`❌ testimonials INSERT: ${e.message}`); }
 
   const allOk = results.every(r=>r.startsWith('✅'));
   res.innerHTML = results.map(r => `<div style="color:${r.startsWith('✅')?'var(--green)':'var(--red)'};font-size:13px;margin-top:4px;">${r}</div>`).join('') +
@@ -2338,9 +2028,6 @@ window.selectStatus=selectStatus; window.testConnection=testConnection; window.c
 window.addWorkFromInquiry=addWorkFromInquiry;
 window.openCustModal=openCustModal; window.closeCustModal=closeCustModal; window.saveCustomer=saveCustomer;
 window.deleteCustomer=deleteCustomer; window.loadCustomers=loadCustomers;
-window.openTiModal=openTiModal; window.closeTiModal=closeTiModal; window.saveTestimonial=saveTestimonial;
-window.deleteTestimonial=deleteTestimonial; window.loadTestimonials=loadTestimonials;
-window.toggleTiActive=toggleTiActive; window.moveTiSort=moveTiSort;
 
 })();
 </script>

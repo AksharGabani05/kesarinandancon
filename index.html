@@ -59,15 +59,40 @@ body{font-family:var(--font-body);color:var(--text);background:var(--off);overfl
 img{max-width:100%;display:block;}a{color:inherit;text-decoration:none;}ul{list-style:none;}
 button{cursor:pointer;border:none;outline:none;font-family:inherit;-webkit-tap-highlight-color:transparent;}
 
-/* ═══════════════════ LOADER ═══════════════════ */
-#loader{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity 0.6s,visibility 0.6s;}
+/* ═══════════════════ LOADER ═══════════════════
+   Signature: a case-file gets drawn, checked line by line,
+   then hand-stamped "VERIFIED" — the same motif as the hero
+   dossier, so the very first frame already tells the story. */
+#loader{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;overflow:hidden;transition:opacity 0.55s ease,visibility 0.55s ease;}
 #loader.gone{opacity:0;visibility:hidden;pointer-events:none;}
-.ld-logo{font-family:var(--font-head);font-size:clamp(18px,4vw,26px);font-weight:800;color:#fff;text-align:center;letter-spacing:1px;}
+#loader::before{content:'';position:absolute;inset:0;background-image:repeating-linear-gradient(180deg,rgba(255,255,255,0.03) 0,rgba(255,255,255,0.03) 1px,transparent 1px,transparent 40px);}
+#loader::after{content:'';position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,0,0.14),transparent 70%);filter:blur(10px);animation:ldGlow 3.2s ease-in-out infinite;}
+@keyframes ldGlow{0%,100%{opacity:0.6;transform:scale(1);}50%{opacity:1;transform:scale(1.08);}}
+
+.ld-stage{position:relative;width:112px;height:132px;z-index:1;}
+.ld-file{width:100%;height:100%;overflow:visible;}
+.ld-file-shape{fill:rgba(255,255,255,0.05);stroke:rgba(255,255,255,0.35);stroke-width:2;}
+.ld-file-tab{fill:var(--saffron);}
+.ld-file-line{stroke:rgba(255,255,255,0.4);stroke-width:4;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:ldLineDraw 0.5s ease forwards;}
+.ld-file-line.l1{animation-delay:0.35s;}
+.ld-file-line.l2{animation-delay:0.55s;}
+.ld-file-line.l3{animation-delay:0.75s;}
+.ld-file-check{stroke:#4CAF50;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;fill:none;stroke-dasharray:26;stroke-dashoffset:26;animation:ldCheckDraw 0.4s ease forwards 1.55s;}
+@keyframes ldLineDraw{to{stroke-dashoffset:0;}}
+@keyframes ldCheckDraw{to{stroke-dashoffset:0;}}
+
+.ld-stamp{position:absolute;inset:0;width:100%;height:100%;transform:rotate(10deg) scale(2.2);opacity:0;filter:blur(2px);animation:ldStampDown 0.5s cubic-bezier(0.2,0.9,0.3,1.4) 1.15s forwards;}
+@keyframes ldStampDown{0%{opacity:0;transform:rotate(10deg) scale(2.2);filter:blur(3px);}55%{opacity:1;filter:blur(0);}100%{opacity:0.95;transform:rotate(-6deg) scale(1);filter:blur(0);}}
+
+.ld-logo{font-family:var(--font-head);font-size:clamp(17px,4vw,24px);font-weight:800;color:#fff;text-align:center;letter-spacing:1px;z-index:1;}
 .ld-logo em{color:var(--saffron);font-style:normal;}
-.ld-bar{width:min(220px,72vw);height:3px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden;}
-.ld-fill{height:100%;background:var(--grad-orange);border-radius:99px;animation:ldGrow 2s ease forwards;}
-@keyframes ldGrow{to{width:100%;}}
-.ld-sub{color:rgba(255,255,255,0.3);font-size:11px;letter-spacing:1px;text-transform:uppercase;}
+
+.ld-progress{display:flex;align-items:center;gap:10px;z-index:1;}
+.ld-bar{width:min(200px,64vw);height:4px;background:rgba(255,255,255,0.1);border-radius:99px;overflow:hidden;}
+.ld-fill{height:100%;width:0%;background:var(--grad-orange);border-radius:99px;box-shadow:0 0 10px rgba(255,107,0,0.6);transition:width 0.12s linear;}
+.ld-pct{font-family:var(--font-head);font-size:12.5px;font-weight:700;color:var(--saffron-glow);min-width:34px;}
+
+.ld-sub{color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:1px;text-transform:uppercase;z-index:1;height:14px;transition:opacity 0.25s ease;}
 
 /* ═══════════════════ LAYOUT ═══════════════════ */
 section{padding:80px 0;}
@@ -422,9 +447,36 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:60px 0 0;}
 
 <!-- LOADER -->
 <div id="loader">
+  <div class="ld-stage">
+    <svg class="ld-file" viewBox="0 0 112 132" xmlns="http://www.w3.org/2000/svg">
+      <rect class="ld-file-tab" x="30" y="4" width="34" height="12" rx="3"/>
+      <rect class="ld-file-shape" x="8" y="14" width="96" height="112" rx="8"/>
+      <line class="ld-file-line l1" x1="24" y1="46" x2="88" y2="46"/>
+      <line class="ld-file-line l2" x1="24" y1="66" x2="76" y2="66"/>
+      <line class="ld-file-line l3" x1="24" y1="86" x2="82" y2="86"/>
+      <path class="ld-file-check" d="M22 104 L34 116 L56 92"/>
+    </svg>
+    <svg class="ld-stamp" viewBox="0 0 112 132" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <filter id="ldInkRough">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/>
+          <feDisplacementMap in="SourceGraphic" in2="noise" scale="3.5"/>
+        </filter>
+      </defs>
+      <g filter="url(#ldInkRough)" fill="none" stroke="var(--saffron)" stroke-width="2.6" transform="translate(56 66)">
+        <circle r="34"/>
+        <circle r="27"/>
+        <text y="-4" text-anchor="middle" fill="var(--saffron)" stroke="none" font-family="Baloo 2, sans-serif" font-weight="800" font-size="9" letter-spacing="1">VERIFIED</text>
+        <text y="14" text-anchor="middle" fill="var(--saffron)" stroke="none" font-family="Baloo 2, sans-serif" font-weight="700" font-size="6.5" letter-spacing="1">KESARI · NANDAN</text>
+      </g>
+    </svg>
+  </div>
   <div class="ld-logo">🏛️ KESARI <em>NANDAN</em> CONSULTANCY</div>
-  <div class="ld-bar"><div class="ld-fill"></div></div>
-  <div class="ld-sub">Loading Government Services Portal…</div>
+  <div class="ld-progress">
+    <div class="ld-bar"><div class="ld-fill" id="ldFill"></div></div>
+    <span class="ld-pct" id="ldPct">0%</span>
+  </div>
+  <div class="ld-sub" id="ldSub">Loading government services portal…</div>
 </div>
 
 <!-- NAVBAR -->
@@ -860,8 +912,39 @@ function fillContact(){
 fillContact();
 
 /* ─────────────────────────────────────────────────
-   LOADER
+   LOADER — percentage count-up + rotating status lines,
+   synced to the file-draw/stamp animation timing above.
    ───────────────────────────────────────────────── */
+(function(){
+  const fill=document.getElementById('ldFill'),
+        pct=document.getElementById('ldPct'),
+        sub=document.getElementById('ldSub'),
+        loader=document.getElementById('loader');
+  if(!fill||!pct||!sub||!loader)return;
+
+  const DURATION=1850;
+  const messages=['Opening your case file…','Verifying documents…','Stamping approval…','Almost ready…'];
+  let msgI=0;
+  sub.textContent=messages[0];
+  const msgIv=setInterval(()=>{
+    msgI=(msgI+1)%messages.length;
+    sub.style.opacity=0;
+    setTimeout(()=>{sub.textContent=messages[msgI];sub.style.opacity=1;},220);
+  },460);
+
+  const start=performance.now();
+  function tick(now){
+    const p=Math.min(1,(now-start)/DURATION);
+    const eased=1-Math.pow(1-p,2);
+    const val=Math.round(eased*100);
+    fill.style.width=val+'%';
+    pct.textContent=val+'%';
+    if(p<1){requestAnimationFrame(tick);}
+    else{clearInterval(msgIv);}
+  }
+  requestAnimationFrame(tick);
+})();
+
 window.addEventListener('load',()=>{
   setTimeout(()=>document.getElementById('loader').classList.add('gone'),1900);
 });
